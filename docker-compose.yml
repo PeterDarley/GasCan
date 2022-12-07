@@ -1,0 +1,39 @@
+version: '0.0'
+services:
+
+  db:
+    image: postgres:15.1-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_PASSWORD: gasmans
+      POSTGRES_USER: GasCan
+      
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U GasCan"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    command: python mysite/manage.py runserver 0.0.0.0:8000
+    #command: bash
+    volumes:
+      - .:/GasCan
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=GasCan
+      - POSTGRES_USER=GasCan
+      - POSTGRES_PASSWORD=gasmans
+    depends_on:
+      - db
+
+volumes:
+  db-data:
+  
+  
+#  docker run --name GasCan-Postgres -e POSTGRES_USER=GasCan -e POSTGRES_PASSWORD=gaswar -p 5432:5432 -v /data:/var/lib/postgresql/data -d postgres
