@@ -1,0 +1,7 @@
+#.git
+#.project
+#.pydevproject
+#.dockerignore
+*
+!requirements.txt
+!mysite
