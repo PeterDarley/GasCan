@@ -32,9 +32,6 @@ class PerkModelTests(TestCase):
         class_perk = Perk(name='Bad Perk', cost=-1, perk_class=perk_class, description="A Perk")
         class_perk.save()
         
-        #perks = Perk.objects.all()
-        #self.assertIs(perks.count(),2)
-        
         self.assertIs(Perk.objects.all().count(), 2)
         
         perk_class.delete()
