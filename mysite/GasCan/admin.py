@@ -6,17 +6,17 @@ class Perk_PerkClass_InLine(admin.TabularInline):
     """ Provides the inline formatting for the perks for perk classes. Excludes the type so all perks that are part of perk classes have a General type. """
     model = Perk
     extra = 0
-    exclude = (['sponsor', 'type', 'vehicle_type'])
+    exclude = (['sponsor', 'type', 'vehicle_types'])
     
 class Perk_Sponsor_InLine(admin.TabularInline):
     """ Provides the inline formatting for the perks for sponsors. """
     model = Perk
     extra = 0
-    exclude = (['perk_class', 'vehicle_type'])
+    exclude = (['perk_class', 'vehicle_types'])
     
 class Perk_VehicleType_InLine(admin.TabularInline):
     """ Provides the inline formatting for the perks for vehicle types. """
-    model = Perk.vehicle_type.through
+    model = Perk.vehicle_types.through
     extra = 0
     exclude = (['sponsor', 'type', 'perk_class'])
 
@@ -29,6 +29,7 @@ class WeaponSpecialRuleInline(admin.TabularInline):
 class PerkClassAdmin(admin.ModelAdmin):
     """ Provides the admin interface for Perk Classes """
     inlines = [Perk_PerkClass_InLine]
+    list_display = ('name', 'perk_count')
 
 @admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
@@ -39,10 +40,14 @@ class SponsorAdmin(admin.ModelAdmin):
 class VehicleTypeAdmin(admin.ModelAdmin):
     """ Provides the admin interface for VehicleType """
     inlines = [Perk_VehicleType_InLine]
+
+@admin.register(Perk)
+class PerkAdmin(admin.ModelAdmin):
+    list_display = ('name', 'perk_class', 'sponsor', 'vehicle_type_names', 'cost')
     
 @admin.register(Weapon)
 class WeaponAdmin(admin.ModelAdmin):
     """ Provides the admin interface for Weapon """
     
-admin.site.register(Perk)
+#admin.site.register(Perk)
 admin.site.register(WeaponSpecialRule)

@@ -9,7 +9,7 @@ class AbstractBase(models.Model):
     
     name = models.CharField(max_length=250)
         
-    def __str__(self):
+    def __str__(self) ->str:
         """ Generic stringify function.  Most objects will have a name so it's the default. """
         return self.name
 
@@ -20,6 +20,14 @@ class Sponsor(AbstractBase):
     
 class PerkClass(AbstractBase):
     """ A class of perk, such as Badass or Military """
+    
+    class Meta:
+        ordering = ['name']
+        
+    @property
+    def perk_count(self) -> int:
+        """ Returns the number of perks in this Perk Class """
+        return Perk.objects.filter(perk_class=self).count()
 
 class VehicleType(AbstractBase):
     """ A Gaslands vehicle type such as Car or Bike"""
@@ -44,15 +52,27 @@ class Perk(AbstractBase):
     
     perk_class = models.ForeignKey(PerkClass, on_delete=models.CASCADE, null=True, blank=True)
     sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, null=True, blank=True)
-    vehicle_type = models.ManyToManyField(VehicleType, blank=True)
+    vehicle_types = models.ManyToManyField(VehicleType, blank=True)
 
     description = models.TextField()
     type = models.CharField(max_length=250, choices=TYPES, default='General')
     cost = models.PositiveSmallIntegerField()
     
+    class Meta:
+        ordering = ['cost', 'name']
+    
+    @property
+    def vehicle_type_names(self) -> str:
+        """ returns the names of the vehicle types of the perk as a string """
+        name_collector = ''
+        for vehicle_type in self.vehicle_types.all():
+            if name_collector: name_collector += ', '
+            name_collector += vehicle_type.name
+            
+        return name_collector
+    
     def save(self, *args, **kwargs):
         """ Overrides save to ensure that the cost of the perk is positive """
-
         if self.cost < 0: self.cost = 0
         super(Perk, self).save(*args, **kwargs)
         

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import PerkClass, Perk, Sponsor
+from .models import PerkClass, Perk, Sponsor, VehicleType
 from .tools import mached_name_choices
 
 class ToolsTests(TestCase):
@@ -51,4 +51,40 @@ class PerkModelTests(TestCase):
         
         sponsor.delete()
         self.assertIs(Perk.objects.all().count(), 0)
+        
+    def test_perk_class_should_return_count_of_its_perks(self):
+        """ Perk Class should report correct number of child Perks """
+        
+        perk_class = PerkClass(name='Test Perk')
+        perk_class.save()
+        
+        self.assertEqual(perk_class.perk_count, 0)
+        
+        perk1 = Perk(name='Perk 1', perk_class=perk_class, description='Perk 1', cost=0)
+        perk1.save()
+        
+        perk2 = Perk(name='Perk 2', perk_class=perk_class, description='Perk 2', cost=0)
+        perk2.save()
+        
+        self.assertEqual(perk_class.perk_count, 2)
+        
+    def test_perk_should_return_vehicle_types_as_str(self):
+        """ Perk should report the correct vehicle types as a string """
+        
+        vehicle_type_1 = VehicleType(name='Vehicle Type 1', hull=1, handling=1, max_gear=1, crew=1, build_slots=1, cost=1)
+        vehicle_type_1.save()
+        
+        vehicle_type_2 = VehicleType(name='Vehicle Type 2', hull=1, handling=1, max_gear=1, crew=1, build_slots=1, cost=1)
+        vehicle_type_2.save()
+        
+        perk = Perk(name='Perk', description='Perk', cost=0)
+        perk.save()
+        
+        perk.vehicle_types.add(vehicle_type_1)
+        perk.vehicle_types.add(vehicle_type_2)
+        
+        self.assertEqual(perk.vehicle_type_names, 'Vehicle Type 1, Vehicle Type 2')
+        
+        
+        
         
