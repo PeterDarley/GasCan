@@ -4,11 +4,6 @@ from .models import PerkClass, Perk, Sponsor, VehicleType
 from .tools import mached_name_choices
 
 class ToolsTests(TestCase):
-    def test_mached_name_choices_should_return_list(self):
-        """ mached_name_choices should return a list of something """
-        
-        self.assertTrue(mached_name_choices(['thing1', 'thing2']) == [('thing1', 'thing1'), ('thing2', 'thing2')])
-        
     def test_mached_name_choices_should_return_list_of_tuples(self):
         """ mached_name_choices should return a list of duplicated tuples """
         
@@ -29,6 +24,8 @@ class PerkModelTests(TestCase):
         
     def test_should_cascade_delete_correctly(self):
         """Perks should only cascade delete when their particular parent is deleted"""
+        starting_perk_count = Perk.objects.all().count();
+        
         perk_class = PerkClass(name='Test Perk')
         perk_class.save()
         
@@ -44,13 +41,13 @@ class PerkModelTests(TestCase):
         class_perk = Perk(name='Bad Perk', cost=-1, perk_class=perk_class, description="A Perk")
         class_perk.save()
         
-        self.assertIs(Perk.objects.all().count(), 2)
+        self.assertIs(Perk.objects.all().count(), starting_perk_count+2)
         
         perk_class.delete()
-        self.assertIs(Perk.objects.all().count(), 1)
+        self.assertIs(Perk.objects.all().count(), starting_perk_count+1)
         
         sponsor.delete()
-        self.assertIs(Perk.objects.all().count(), 0)
+        self.assertIs(Perk.objects.all().count(), starting_perk_count+0)
         
     def test_perk_class_should_return_count_of_its_perks(self):
         """ Perk Class should report correct number of child Perks """
