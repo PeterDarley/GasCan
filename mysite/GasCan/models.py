@@ -3,7 +3,6 @@ from .tools import mached_name_choices
  
 class AbstractBase(models.Model):
     """ A base class to hold comon methods and attributes.  It's Abstract so Django won't make a table for it"""
-    
     class Meta:
         abstract = True
     
@@ -13,14 +12,14 @@ class AbstractBase(models.Model):
         """ Generic stringify function.  Most objects will have a name so it's the default. """
         return self.name
 
+
 class Sponsor(AbstractBase):
     """ A Gaslands sponsor """
-    
     description = models.TextField()
+  
     
 class PerkClass(AbstractBase):
     """ A class of perk, such as Badass or Military """
-    
     class Meta:
         ordering = ['name']
         
@@ -29,9 +28,9 @@ class PerkClass(AbstractBase):
         """ Returns the number of perks in this Perk Class """
         return Perk.objects.filter(perk_class=self).count()
 
+
 class VehicleType(AbstractBase):
     """ A Gaslands vehicle type such as Car or Bike"""
-    
     WEIGHTS = mached_name_choices(['Lightweight', 'Middleweight','Heavyweight'])
     
     sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, null=True, blank=True)
@@ -44,10 +43,10 @@ class VehicleType(AbstractBase):
     build_slots = models.PositiveSmallIntegerField()
     cost = models.PositiveSmallIntegerField()
     trailer = models.BooleanField(default=False)
+
     
 class Perk(AbstractBase):
     """ A Gaslands perk.  Can be categorized as part of a Sponsor, or a Perk Class, or a Vehicle Type """
-    
     TYPES = mached_name_choices(['General', 'Sponsor'])
     
     perk_class = models.ForeignKey(PerkClass, on_delete=models.CASCADE, null=True, blank=True)
@@ -59,7 +58,7 @@ class Perk(AbstractBase):
     cost = models.PositiveSmallIntegerField()
     
     class Meta:
-        ordering = ['cost', 'name']
+        ordering = ['perk_class', 'sponsor', 'cost', 'name']
     
     @property
     def vehicle_type_names(self) -> str:
@@ -75,15 +74,15 @@ class Perk(AbstractBase):
         """ Overrides save to ensure that the cost of the perk is positive """
         if self.cost < 0: self.cost = 0
         super(Perk, self).save(*args, **kwargs)
+     
         
 class WeaponSpecialRule(AbstractBase):
     """ A Gasslands special rule for weapons """
-    
     description = models.TextField()
+    
      
 class Weapon(AbstractBase):
     """ A Gaslands weapon """
-    
     RANGES = mached_name_choices(['Short', 'Medium', 'Long', 'Double', 'Dropped', 'Small Burst', 'Large Burst', 'Smash', 'Double/Dropped', 'Short/Medium', 'Short/Medium/Long'])
     
     weapon_special_rule = models.ManyToManyField(WeaponSpecialRule, blank=True)
