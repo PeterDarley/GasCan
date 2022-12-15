@@ -20,9 +20,7 @@ services:
   web:
     image: pdarley/gascan
     build: .
-    #build: ./mysite
     command: python mysite/manage.py runserver 0.0.0.0:8000
-    #command: bash
     volumes:
       - .:/GasCan
     ports:
