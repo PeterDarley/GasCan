@@ -8,6 +8,7 @@ class ToolsTests(TestCase):
         """ mached_name_choices should return a list of duplicated tuples """
         
         self.assertTrue(mached_name_choices(['thing1', 'thing2']) == [('thing1', 'thing1'), ('thing2', 'thing2')])
+    
 
 class PerkModelTests(TestCase):
     def test_should_have_positive_cost(self):
@@ -82,6 +83,22 @@ class PerkModelTests(TestCase):
         
         self.assertEqual(perk.vehicle_type_names, 'Vehicle Type 1, Vehicle Type 2')
         
+    def test_sponsor_should_return_perk_classes_as_str(self):
+        """ Sponsors should report the correct perk classes as a string """
+        
+        perk_class_1 = PerkClass(name='Perk Class 1')
+        perk_class_1.save()
+        
+        perk_class_2 = PerkClass(name='Perk Class 2')
+        perk_class_2.save()
+        
+        sponsor = Sponsor(name='Sponsor', description='Sponsor')
+        sponsor.save();
+        
+        sponsor.perk_classes.add(perk_class_1)
+        sponsor.perk_classes.add(perk_class_2)
+        
+        self.assertEqual(sponsor.perk_class_names, 'Perk Class 1, Perk Class 2')
         
         
         

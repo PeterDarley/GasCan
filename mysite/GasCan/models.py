@@ -10,12 +10,7 @@ class AbstractBase(models.Model):
         
     def __str__(self) ->str:
         """ Generic stringify function.  Most objects will have a name so it's the default. """
-        return self.name
-
-
-class Sponsor(AbstractBase):
-    """ A Gaslands sponsor """
-    description = models.TextField()
+        return self.name # pragma: no cover
   
     
 class PerkClass(AbstractBase):
@@ -28,6 +23,25 @@ class PerkClass(AbstractBase):
         """ Returns the number of perks in this Perk Class """
         return Perk.objects.filter(perk_class=self).count()
 
+
+class Sponsor(AbstractBase):
+    """ A Gaslands sponsor """
+    class Meta:
+        ordering = ['name']
+        
+    description = models.TextField()
+    
+    perk_classes = models.ManyToManyField(PerkClass, blank=True)
+    
+    @property
+    def perk_class_names(self):
+        """Returns the names of the Perk Classes for this Sponsor as a string """
+        # This is gross.  There's probably a way to get the names in a QueryObject as a string in a single line
+        name_collector = ''
+        for vehicle_type in self.perk_classes.all():
+            if name_collector: name_collector += ', '
+            name_collector += vehicle_type.name
+        return name_collector
 
 class VehicleType(AbstractBase):
     """ A Gaslands vehicle type such as Car or Bike"""
@@ -67,7 +81,6 @@ class Perk(AbstractBase):
         for vehicle_type in self.vehicle_types.all():
             if name_collector: name_collector += ', '
             name_collector += vehicle_type.name
-            
         return name_collector
     
     def save(self, *args, **kwargs):

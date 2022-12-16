@@ -41,6 +41,7 @@ class PerkClassAdmin(admin.ModelAdmin):
 class SponsorAdmin(admin.ModelAdmin):
     """ Provides the admin interface for Sponsors """
     inlines = [Perk_Sponsor_InLine]
+    list_display = ('name', 'perk_class_names')
     
     
 @admin.register(VehicleType)
@@ -55,7 +56,7 @@ class PerkAdmin(admin.ModelAdmin):
     list_display = ('name', 'perk_class', 'sponsor', 'vehicle_type_names', 'cost')
 
 
-@admin.register(WeaponSpecialRule())
+@admin.register(WeaponSpecialRule)
 class WeaponSpeacialRuleAdmin(admin.ModelAdmin):
     """ Provides the admin interface for Weapon """
     
