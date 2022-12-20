@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sponsor, PerkClass, Perk, VehicleType, WeaponSpecialRule, Weapon
+from .models import Sponsor, PerkClass, Perk, VehicleType, WeaponUpgradeSpecialRule, Weapon, Upgrade
 
 
 # Set up the inlines
@@ -25,8 +25,8 @@ class Perk_VehicleType_InLine(admin.TabularInline):
 
 
 class WeaponSpecialRuleInline(admin.TabularInline):
-    """ Provides the inline formatting for the WeaponSpecialRule inline """
-    model = WeaponSpecialRule
+    """ Provides the inline formatting for the WeaponUpgradeSpecialRule inline """
+    model = WeaponUpgradeSpecialRule
 
 
 # Build admin pages
@@ -48,7 +48,7 @@ class SponsorAdmin(admin.ModelAdmin):
 class VehicleTypeAdmin(admin.ModelAdmin):
     """ Provides the admin interface for VehicleType """
     inlines = [Perk_VehicleType_InLine]
-
+    list_display = ('name', 'weight', 'hull', 'handling', 'max_gear', 'crew', 'build_slots', 'perk_names', 'cost')
 
 @admin.register(Perk)
 class PerkAdmin(admin.ModelAdmin):
@@ -56,7 +56,7 @@ class PerkAdmin(admin.ModelAdmin):
     list_display = ('name', 'perk_class', 'sponsor', 'vehicle_type_names', 'cost')
 
 
-@admin.register(WeaponSpecialRule)
+@admin.register(WeaponUpgradeSpecialRule)
 class WeaponSpeacialRuleAdmin(admin.ModelAdmin):
     """ Provides the admin interface for Weapon """
     
@@ -64,6 +64,11 @@ class WeaponSpeacialRuleAdmin(admin.ModelAdmin):
 @admin.register(Weapon)
 class WeaponAdmin(admin.ModelAdmin):
     """ Provides the admin interface for Weapon """
+    list_display = ('name', 'type', 'range', 'attack_dice_pretty', 'build_slots', 'cost', 'weapon_special_rule_names', 'ammo', 'sponsor_names')
+    #list_editable = ('type',)
 
-
+@admin.register(Upgrade)
+class UpgradeAdmin(admin.ModelAdmin):
+    """ Provides the admin interface for Upgrade """
+    list_display = ('name', 'build_slots', 'cost', 'upgrade_special_rule_names', 'sponsor_names')
 
