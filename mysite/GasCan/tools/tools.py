@@ -1,10 +1,4 @@
-'''
-Created on Dec 13, 2022
-
-@author: pdarley
-
-Holds any random tools used in GasCan
-'''
+''' Holds any random tools used in GasCan. '''
 from django.db.models.query import QuerySet
 
 

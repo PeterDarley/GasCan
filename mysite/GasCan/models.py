@@ -1,5 +1,5 @@
 from django.db import models
-from .tools import mached_name_choices, name_collector
+from .tools.tools import mached_name_choices, name_collector
  
 class BaseModel(models.Model):
     """ A base class to hold comon methods and attributes.  It's Abstract so Django won't make a table for it"""
