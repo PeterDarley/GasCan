@@ -4,8 +4,6 @@ from django.test import TestCase
 from .tools.tools import mached_name_choices
 from .tools.testing import *
 
-# Set up elves to make objects for the tests
-
 
 # Start the actual tests
 class ToolsTests(TestCase):
@@ -102,7 +100,7 @@ class PerkModelTests(TestCase):
         self.assertEqual(weapon_3.attack_dice_pretty, None)
         
     def test_weapons_should_return_weapon_special_rules_as_str(self):
-        """ Weapons should repot the correct Weapon Special Rules as a string """
+        """ Weapons should report the correct Weapon Special Rules as a string """
         weapon_special_rule_1, weapon_special_rule_2 = some_weapon_special_rules(2)
         weapon = a_weapon(special_rule='A special rule')
         
@@ -110,6 +108,16 @@ class PerkModelTests(TestCase):
         weapon.weapon_special_rules.add(weapon_special_rule_2)
         
         self.assertEqual(weapon.weapon_special_rule_names, f'{weapon_special_rule_1.name}, {weapon_special_rule_2.name}, {weapon.name}')
+        
+    def test_weapons_should_return_spoonsor_names_as_str(self):
+        """ Weapons should report  the correct Sponsors as a string """
+        weapon = a_weapon()
+        sponsor_1, sponsor_2 = some_sponsors(2)
+        
+        weapon.sponsors.add(sponsor_1)
+        weapon.sponsors.add(sponsor_2)
+        
+        self.assertEqual(weapon.sponsor_names, f'{sponsor_1.name}, {sponsor_2.name}')
         
     def test_upgrades_should_return_upgrade_special_rules_as_str(self):
         """ Upgrades should report the correct Upgrade Special Rules as a string """
@@ -120,6 +128,17 @@ class PerkModelTests(TestCase):
         upgrade.upgrade_special_rules.add(upgrade_special_rule_2)
         
         self.assertEqual(upgrade.upgrade_special_rule_names, f'{upgrade_special_rule_1.name}, {upgrade_special_rule_2}, {upgrade.name}')
+        
+    def test_upgrades_should_return_sponsors_as_str(self):
+        """ Upgrades should repor the correct Sponsors as a string """
+        upgrade = an_upgrade()
+        sponsor_1, sponsor_2 = some_sponsors(2)
+        
+        upgrade.sponsors.add(sponsor_1)
+        sponsor_2.upgrades.add(upgrade)
+        
+        self.assertEqual(upgrade.sponsor_names, f'{sponsor_1.name}, {sponsor_2.name}')
+    
         
         
         

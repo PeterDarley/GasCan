@@ -155,14 +155,14 @@ class Upgrade(BaseModel):
     max_gear_adjust = models.SmallIntegerField(null=True, blank=True)
     crew_adjust = models.SmallIntegerField(null=True, blank=True)
     trailer_adjust = models.BooleanField('Is a trailer', default=False)
-    weight_limit = models.CharField(max_length=250, choices=VehicleType.WEIGHTS, null=True, blank=True)
+    weight_exclude = models.PositiveSmallIntegerField(choices=VehicleType.WEIGHTS, null=True, blank=True)
     sponsors = models.ManyToManyField(Sponsor, blank=True, related_name='upgrades')
     build_slots = models.SmallIntegerField()
     cost = models.SmallIntegerField()
     special_rule = models.TextField(null=True, blank=True)
     
     class Meta:
-        ordering = ['cost', 'name']
+        ordering = ['name']
         
     @property
     def upgrade_special_rule_names(self) -> str:

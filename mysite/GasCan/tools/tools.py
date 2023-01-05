@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 
 if __name__ == '__main__':
     """ Tools should never be run.  It only holds functions. """
-    pass
+    pass # pragma: no cover
 
 def mached_name_choices(choices: list) -> list:
     """ Functin to return a list of tuples that contains the origional list doubled

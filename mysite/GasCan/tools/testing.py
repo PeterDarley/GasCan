@@ -1,11 +1,11 @@
-""" Holds sest object setup stuff """
+""" Holds test object setup stuff """
 
 from ..models import PerkClass, Perk, Sponsor, VehicleType, Weapon, WeaponUpgradeSpecialRule, Upgrade
 import inspect
 
 if __name__ == '__main__':
     """ Tools should never be run.  It only holds functions. """
-    pass
+    pass # pragma: no cover
 
 
 object_counts = {}
@@ -26,6 +26,7 @@ def a_sponsor() -> Sponsor:
     return sponsor
 
 def some_sponsors(count: int, **kwargs) ->list:
+    """ Get some Sponsors for testing """
     sponsors = []
     for i in range(count):
         sponsors.append(a_sponsor(**kwargs))
